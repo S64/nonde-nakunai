@@ -24,6 +24,11 @@ namespace NondeNakunai
             get { return Environment.GetEnvironmentVariable("NONDENAKUNAI_SLACK_BOT_USER_TOKEN"); }
         }
 
+        public static string Mode
+        {
+            get { return Environment.GetEnvironmentVariable("NONDENAKUNAI_MODE"); }
+        }
+
         public static SlackOptions Options
         {
             get {
@@ -36,12 +41,12 @@ namespace NondeNakunai
 
         public static void Main(string[] args)
         {
-            if ("events".Equals(args[0]))
+            if ("events".Equals(Mode) || "events".Equals(args[0]))
             {
                 WebHost.CreateDefaultBuilder(args)
                     .UseStartup<Startup>().Build().Run();
             }
-            else if ("rtm".Equals(args[0]))
+            else if ("rtm".Equals(Mode) || "rtm".Equals(args[0]))
             {
                 var adapter = new SlackAdapter(Program.Options)
                     .Use(new SlackMessageTypeMiddleware());
